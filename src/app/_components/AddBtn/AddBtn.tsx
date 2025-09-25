@@ -19,7 +19,7 @@ export default function AddBtn({ id }: { id: string }) {
       toast.success("Product added successfully", { position: "top-center" });
       setnumberOfCartItem(numberOfCartItem + 1);
     } else {
-      toast.error(res.message || "Couldn't add product", {
+      toast.error("Couldn't add product", {
         position: "top-center",
       });
     }
