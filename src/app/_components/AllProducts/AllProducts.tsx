@@ -11,13 +11,16 @@ export default function AllProducts() {
   const [products, setProducts] = useState<ProductType[]>([]);
   const [wishlistIds, setWishlistIds] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
+  const [page, setpage] = useState(1)
+
+  async function fetchProducts(params?:string) {
+    const p = await getProducts(params);
+    setProducts(p);
+    setLoading(false);
+  }
 
   useEffect(() => {
-    (async () => {
-      const p = await getProducts();
-      setProducts(p);
-      setLoading(false);
-    })();
+    fetchProducts();
   }, []);
 
   useEffect(() => {
@@ -48,6 +51,28 @@ export default function AllProducts() {
           />
         ))}
       </div>
+      <ul className="flex justify-center items-center gap-3 mt-8">
+        <li
+          onClick={() => {
+            fetchProducts("?page=1");
+            setpage(1)
+            window.scrollTo({ top: 500, behavior: "smooth" });
+
+                 }}
+          className={`cursor-pointer px-4 py-2 rounded-full text-white font-medium shadow-md transition-all duration-200 hover:bg-emerald-600 active:scale-95 ${page === 1 ? "bg-emerald-500":"bg-gray-200" }`} >
+          1
+        </li>
+        <li
+          onClick={() => {
+            fetchProducts("?page=2");
+            setpage(2)
+            window.scrollTo({ top: 500, behavior: "smooth" });
+          }}
+          className={`cursor-pointer px-4 py-2 rounded-full  text-gray-800 font-medium shadow-md transition-all duration-200 hover:bg-emerald-500 hover:text-white active:scale-95 ${page === 2 ? "bg-emerald-500" : "bg-gray-200"}  `}
+        >
+          2
+        </li>
+      </ul>
     </div>
   );
 }
