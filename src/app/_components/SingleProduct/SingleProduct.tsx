@@ -15,6 +15,7 @@ import AddProductToWishlist from "@/api/addToWishlist.api";
 import RemoveProductFromWishlist from "@/api/removeFromWishlist.api";
 import { toast } from "sonner";
 import Image from "next/image";
+import { useSession } from "next-auth/react";
 
 export default function SingleProduct({
   product,
@@ -26,13 +27,18 @@ export default function SingleProduct({
   setWishlistIds?: React.Dispatch<React.SetStateAction<string[]>>;
 }) {
   const [isLoading, setIsLoading] = useState(false);
-
+  const { data: session } = useSession();
 
   const isInWishlist = wishlistIds?.includes(product.id) ?? false;
 
   async function handleWishAction(productId: string) {
-
     if (!wishlistIds || !setWishlistIds) return;
+
+    if (!session) {
+      return toast.error("You must be logged in to perform this action.", {
+        position: "top-center",
+      });
+    }
 
     setIsLoading(true);
     try {
